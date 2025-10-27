@@ -24,17 +24,35 @@ public class JpaMain {
         // code
         try{
 
-            Member member = em.find(Member.class,150L);
-            member.setName("AAAAAAAA"); // update 쿼리 나가려다가
 
-            em.clear(); // 영속성 컨텍스트가 empty 됨
+            Member member1 =new Member();
+            member1.setUsername("김수정");
 
-            Member member2 = em.find(Member.class,150L); // 1차 캐시에서 가지오 올 게 없음. => select 쿼리 2번
+            Member member2 =new Member();
+            member2.setUsername("김수정");
 
+            Member member3 =new Member();
+            member3.setUsername("김수정");
+            // 비영속 상태
 
-            System.out.println("============= 구분선 =================");
+            System.out.println("========================");
+
+            em.persist(member1); // 영속
+            em.persist(member2); //
+            em.persist(member3); //
+
+            // select 성능 저하  => db로부터 allocationSize50개를 떙겨오자
+            // 1번부터 50번까지를 쓰는거임 => 처음에만 select 2,3은 안함
+
+            System.out.println("member1: " +member1.getId());
+            System.out.println("member2: " +member2.getId());
+            System.out.println("member3: " +member3.getId());
+
 
             tx.commit();
+
+
+
         }catch (Exception e){
             tx.rollback();
         }finally {
