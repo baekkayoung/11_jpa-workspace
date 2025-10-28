@@ -18,15 +18,14 @@ public class JpaMain {
         // code
         try{
             
-            // 슈더 코드
-            Order order = em.find(Order.class, 1L); // 주문을 찾아서
-            Long memberId = order.getMemberId(); // 주문의 member의 id만 찾은 거임 객체 찾은 거 x
-            Member member = em.find(Member.class, memberId);
+            Order order = new Order();
+//            order.addOrderItem();  => 이렇게 못 함
+//            order.addOrderItem(new OrderItem()); // => 알트엔터로 메소드 만들기
+            em.persist(order); // 주문
 
-            Member findMember = order.getMember(); // 이게 더 객체 지향적
-            // 객체는 참조를 찾아갈 수 있어야
-
-
+            OrderItem orderItem =new OrderItem();
+            orderItem.setOrder(order);
+            em.persist(orderItem);
 
             tx.commit();
 

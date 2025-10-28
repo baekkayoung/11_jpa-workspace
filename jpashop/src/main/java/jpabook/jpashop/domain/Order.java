@@ -3,6 +3,8 @@ package jpabook.jpashop.domain;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "ORDERS")
@@ -12,25 +14,36 @@ public class Order {
     @Column(name = "ORDER_ID")
     private Long id;
 
-    @Column(name="MEMBER_ID")
-    private Long memberId;
+//    @Column(name="MEMBER_ID")
+//    private Long memberId;
 
-    private Member member; // id만 가지고 오는 게 아니라 박선일이라는 사람 자체를 가지고 옴
+    @ManyToOne
+    @JoinColumn(name="MEMBER_ID")
+    private Member member;
+    // id만 가지고 오는 게 아니라 박선일이라는 사람 자체를 가지고 옴
     // 회원 객체 자체를 들고 있음
 
+    @OneToMany(mappedBy = "order")
+    private List<OrderItem> orderItems = new ArrayList<>();
 
-    public Member getMember() {
-        return member;
-    }
-
-    public void setMember(Member member) {
-        this.member = member;
-    }
+    @OneToOne
+    @JoinColumn(name = "DELIVERY_ID")
+    private Delivery delivery;
 
     private LocalDateTime orderDate; // 시간까지 ORDER_DATE order_date
 
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
+
+    public void addOrderItem(OrderItem orderItem) {
+
+        // 순수한 객체 상태로 맞추기 위해
+        orderItems.add(orderItem);
+        orderItem.setOrder(this);
+        // 연관 메소드는 게스트 주인 어디에서 만드는건지는 선택
+        // 이거는 게스트에서 만든거임..
+
+    }
 
     public  Order(){}
 
@@ -42,12 +55,12 @@ public class Order {
         this.id = id;
     }
 
-    public Long getMemberId() {
-        return memberId;
+    public Member getMember() {
+        return member;
     }
 
-    public void setMemberId(Long memberId) {
-        this.memberId = memberId;
+    public void setMember(Member member) {
+        this.member = member;
     }
 
     public LocalDateTime getOrderDate() {
@@ -65,4 +78,6 @@ public class Order {
     public void setStatus(OrderStatus status) {
         this.status = status;
     }
+
+
 }
