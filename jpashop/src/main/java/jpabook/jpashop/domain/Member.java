@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Member {
+public class Member extends BaseEntity {
 
 
 //    @GeneratedValue(strategy = GenerationType.AUTO) 기본 auto
@@ -74,4 +74,5 @@ public class Member {
     public void setZipcode(String zipcode) {
         this.zipcode = zipcode;
     }
+
 }

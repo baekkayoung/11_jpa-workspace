@@ -5,8 +5,10 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static jakarta.persistence.FetchType.LAZY;
+
 @Entity
-public class Category {
+public class Category extends BaseEntity{
     @Id @GeneratedValue
     private Long id;
 
@@ -18,7 +20,7 @@ public class Category {
             inverseJoinColumns = @JoinColumn(name = "ITEM_ID"))
     private List<Item> items = new ArrayList<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "PARENT_ID")
     private Category parent; // 이 카테고리의 상위 카테고리 => 카테고리의 상위 => 다
 

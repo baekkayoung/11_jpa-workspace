@@ -6,7 +6,7 @@ import java.util.List;
 
 @Entity
 
-public class Member {
+public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue
@@ -16,9 +16,17 @@ public class Member {
     @Column(name = "USERNAME")
     private String username;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY) // 팀 조회 안함
     @JoinColumn(name = "TEAM_ID")
     private Team team;
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
 
     @OneToOne
     @JoinColumn(name = "LOCKER_ID")

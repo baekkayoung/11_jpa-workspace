@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "ORDERS")
-public class Order {
+public class Order extends BaseEntity{
     @Id
     @GeneratedValue // 안 적으면 auto
     @Column(name = "ORDER_ID")
@@ -17,7 +17,7 @@ public class Order {
 //    @Column(name="MEMBER_ID")
 //    private Long memberId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="MEMBER_ID")
     private Member member;
     // id만 가지고 오는 게 아니라 박선일이라는 사람 자체를 가지고 옴
@@ -26,7 +26,7 @@ public class Order {
     @OneToMany(mappedBy = "order")
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "DELIVERY_ID")
     private Delivery delivery;
 

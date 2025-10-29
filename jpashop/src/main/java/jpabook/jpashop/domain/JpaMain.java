@@ -17,18 +17,19 @@ public class JpaMain {
 
         // code
         try{
-            
-            Order order = new Order();
-//            order.addOrderItem();  => 이렇게 못 함
-//            order.addOrderItem(new OrderItem()); // => 알트엔터로 메소드 만들기
-            em.persist(order); // 주문
+            Child child1 = new Child();
+            Child child2 = new Child();
 
-            OrderItem orderItem =new OrderItem();
-            orderItem.setOrder(order);
-            em.persist(orderItem);
+            Parent parent = new Parent();
+            parent.addChild(child1);
+            parent.addChild(child2);
+
+            em.persist(parent);
+//            em.persist(child1);
+//            em.persist(child2);
+
 
             tx.commit();
-
 
 
         }catch (Exception e){
