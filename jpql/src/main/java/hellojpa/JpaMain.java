@@ -4,11 +4,7 @@ import jakarta.persistence.*;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
-import org.h2.util.json.JsonConstructorUtils;
-import org.hibernate.Hibernate;
-import org.hibernate.internal.build.AllowSysOut;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class JpaMain {
@@ -21,20 +17,19 @@ public class JpaMain {
         tx.begin();
 
         // code
-        try {
-            CriteriaBuilder cb = em.getCriteriaBuilder();
-            CriteriaQuery<Member> query = cb.createQuery(Member.class);
+        try {vercel login
+                
 
-            //루트 클래스 (조회를 시작할 클래스)
-            Root<Member> m = query.from(Member.class);
+            Member member = new Member();
+            member.setUsername("member1");
+            member.setAge(10);
+            em.persist(member);
 
-            //쿼리 생성
-            CriteriaQuery<Member> cq = query.select(m).where(cb.equal(m.get("username"), "kim"));
-            List<Member> resultList = em.createQuery(cq).getResultList();
+            Member singleResult = em.createQuery("select m from Member m where m.username = :username", Member.class)
+                                .setParameter("username","member1")
+                                .getSingleResult();
+            System.out.println("singleResult : " + singleResult.getUsername());
 
-            for(Member member : resultList){
-                System.out.println("member: " + member);
-            }
 
             tx.commit();
         } catch (Exception e) {

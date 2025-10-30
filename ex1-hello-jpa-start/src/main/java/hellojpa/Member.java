@@ -1,8 +1,13 @@
 package hellojpa;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
 
@@ -10,85 +15,35 @@ public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue
-    @Column(name="MEMBER_ID")
+    @Column(name = "MEMBER_ID")
     private Long id;
 
     @Column(name = "USERNAME")
     private String username;
 
-    @ManyToOne(fetch = FetchType.LAZY) // 팀 조회 안함
-    @JoinColumn(name = "TEAM_ID")
-    private Team team;
+    @Embedded
+    private Address homeAddress;
 
-    public Team getTeam() {
-        return team;
+    @ElementCollection // 값타입 컬렉션
+    @CollectionTable(name = "FAVORITE_FOOD",
+            joinColumns = @JoinColumn(name = "MEMBER_ID"))
+    @Column(name = "FOOD_NAME") // PK인 ID 제외 유일 NAME
+    private Set<String> favoriteFoods = new HashSet<>(); //중복을 방지하는 Set
+
+//    @ElementCollection
+//    @CollectionTable(name = "ADDRESS", joinColumns = @JoinColumn(name = "MEMBER_ID"))
+//    private List<Address> addressHistory = new ArrayList<>();
+
+    @OneToMany(cascade = ALL, orphanRemoval = true) // 생명주기자체를 멤버의 생명주기에 의존해야 함 근데 왜 원투매니임?
+    @JoinColumn(name = "MEMBER_ID") // 매핑
+    private List<AddressEntity> addressHistory = new ArrayList<>(); // 엔티티로 승격
+
+    public Address getHomeAddress() {
+        return homeAddress;
     }
 
-    public void setTeam(Team team) {
-        this.team = team;
-    }
-
-    @OneToOne
-    @JoinColumn(name = "LOCKER_ID")
-    private Locker locker;
-
-    @ManyToMany
-    @JoinTable(name = "MEMBER_PRODUCT") // 멤버와 프로덕트를 연결하는 중간 테이블 생성 각각 id(pk)를 가지고 만듦
-    private List<Product> products = new ArrayList<>();
-
-
-    // @Column(name="TEAM_ID")
-    // private Long teamId;
-
-    // id만 주는 게 아니라 자체를
-    // JPA에게 관계를 알려줘야 함! 누가 다(N) 고 누가 일(1) 인지
-    // db랑도 관계를 엮어줘야 => 어느 컬럼이랑?
-
-//    @ManyToOne // 다대일
-//    @ManyToOne(fetch = FetchType.LAZY) //
-//    @JoinColumn(name = "TEAM_ID") // DB 보면 FK-PK 연결 되어있음
-//    private Team team;
-
-    public Member(){}
-
-//    public Long getId() {
-//        return id;
-//    }
-//
-//    public void setId(Long id) {
-//        this.id = id;
-//    }
-//
-//    public String getUsername() {
-//        return username;
-//    }
-//
-//    public void setUsername(String username) {
-//        this.username = username;
-//    }
-//
-//    public Team getTeam() {
-//        return team;
-//    }
-//
-//    public void changeTeam(Team team) { //setTeam => changeTeam
-//        this.team = team;
-//        team.getMembers().add(this);
-//        // team.getMembers().add(member) 한거랑 같음.
-//        // 연관관계 편의 메소드
-//    }
-//
-//    public void setTeam(Team team) {
-//        this.team = team;
-//    }
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public void setHomeAddress(Address homeAddress) {
+        this.homeAddress = homeAddress;
     }
 
     public String getUsername() {
@@ -98,4 +53,30 @@ public class Member extends BaseEntity {
     public void setUsername(String username) {
         this.username = username;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Set<String> getFavoriteFoods() {
+        return favoriteFoods;
+    }
+
+    public void setFavoriteFoods(Set<String> favoriteFoods) {
+        this.favoriteFoods = favoriteFoods;
+    }
+
+    public List<AddressEntity> getAddressHistory() {
+        return addressHistory;
+    }
+
+    public void setAddressHistory(List<AddressEntity> addressHistory) {
+        this.addressHistory = addressHistory;
+    }
 }
+
+
