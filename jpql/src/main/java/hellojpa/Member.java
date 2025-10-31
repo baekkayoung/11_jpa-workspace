@@ -18,6 +18,12 @@ public class Member {
     @JoinColumn(name="TEAM_ID") // 주인은 조인컬럼
     private Team team;
 
+    @Embedded
+    private Address address;
+
+    @Enumerated(EnumType.ORDINAL)
+    private MemberType memberType;
+
     public Long getId() {
         return id;
     }
@@ -48,5 +54,31 @@ public class Member {
 
     public void setTeam(Team team) {
         this.team = team;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public MemberType getMemberType() {
+        return memberType;
+    }
+
+    public void setMemberType(MemberType memberType) {
+        this.memberType = memberType;
+    }
+
+    @Override
+    public String toString() {
+        return "Member{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", age=" + age +
+                ", address=" + address +
+                '}';
     }
 }
