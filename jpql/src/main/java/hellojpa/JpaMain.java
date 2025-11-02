@@ -1,12 +1,10 @@
 package hellojpa;
 
+import hellojpa.dto.ProductDTO;
 import jakarta.persistence.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Root;
+import hellojpa.dto.OrderProductDTO;
 
 import java.util.List;
-import java.util.Objects;
 
 public class JpaMain {
 
@@ -46,53 +44,54 @@ public class JpaMain {
 
             Product product1 = new Product();
             product1.setName("Apple");
-            product1.setPrice(4000);
-            product1.setStockAmount(2);
+            product1.setPrice(100);
+            product1.setStockAmount(3);
             em.persist(product1);
 
             Product product2 = new Product();
-            product2.setName("lipstick");
-            product2.setPrice(100);
-            product2.setStockAmount(1);
+            product2.setName("melon");
+            product2.setPrice(2000);
+            product2.setStockAmount(3);
             em.persist(product2);
+
+            Product product3 = new Product();
+            product3.setName("테스트 상품");
+            product3.setPrice(6000);
+            product3.setStockAmount(3);
+            em.persist(product3);
 
             Address address1 = new Address("서울", "테헤란로", "10000");
             Address address2 = new Address("인천", "선학로", "21910");
 
             Order order1 = new Order();
             order1.setAddress(address1);
-            order1.setOrderAmount(0);
+            order1.setOrderAmount(1);
             order1.setProduct(product1);
             em.persist(order1);
 
             Order order2 = new Order();
             order2.setAddress(address2);
-            order2.setOrderAmount(0);
+            order2.setOrderAmount(2);
             order2.setProduct(product2);
             em.persist(order2);
+
+            Order order3 = new Order();
+            order3.setAddress(address2);
+            order3.setOrderAmount(3);
+            order3.setProduct(product3);
+            em.persist(order3);
 
             em.flush();
             em.clear();
 
+            String query = "select new hellojpa.dto.OrderProductDTO(o.orderAmount, name) " +
+                    "from Order o join o.product p";
 
+            List<OrderProductDTO> resultList = em.createQuery(query, OrderProductDTO.class).getResultList();
 
-            // 18.
-            String query = "select o from Order o join o.product p" +
-                    " where p.id = Any(select o1.product.id from Order o1)";
-
-            List<Order> resultList = em.createQuery(query,Order.class).getResultList();
-
-            for (Order order : resultList) {
-                System.out.println(order);
+            for (OrderProductDTO orderProductDTO : resultList) {
+                System.out.println("주문의 금액 : " + orderProductDTO.getOrderAmount() + " 주문한 상품 이름 : "+ orderProductDTO.getProductName());
             }
-
-//            String query = "select o from Order o"
-//                    + " where o.product = ANY(select p from Product p)";
-//            List<Order> orders = em.createQuery(query, Order.class).getResultList();
-//            for (Order o1 : orders) {
-//                System.out.println("그 상품을 주문한 주문 : " + o1);
-//            }
-
 
 
 //            String query = "select m from Member m where m.memberType = hellojpa.jpql.MemberType.ADMIN";
