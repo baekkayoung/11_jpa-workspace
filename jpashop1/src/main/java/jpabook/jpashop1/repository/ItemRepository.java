@@ -1,0 +1,32 @@
+package jpabook.jpashop1.repository;
+
+import jakarta.persistence.EntityManager;
+import jpabook.jpashop1.domain.Item.Item;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+@RequiredArgsConstructor
+public class ItemRepository {
+
+    private final EntityManager em;
+
+    public void save(Item item){
+        if(item.getId() == null){ // db에 없는 id니까 저장
+            em.persist(item);
+        } else{
+            em.merge(item); // update
+        }
+    }
+
+    public Item findOne(Long id){
+        return em.find(Item.class,id);
+    }
+
+    public List<Item> findAll(){
+        return em.createQuery("select i from Item",Item.class).getResultList();
+    }
+
+}

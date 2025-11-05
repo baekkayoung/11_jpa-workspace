@@ -2,6 +2,7 @@ package jpabook.jpashop1.domain.Item;
 
 import jakarta.persistence.*;
 import jpabook.jpashop1.domain.Category;
+import jpabook.jpashop1.exception.NotEnoughStockException;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -27,4 +28,27 @@ public abstract class Item {
 //    @JoinTable(name="category_item") 이미 category에서 적어뒀기 때문에 또 적지 않아도 됨
     private List<Category> category = new ArrayList<>();
 
+
+    // == 비즈니스 로직 == //
+
+    /**
+     * stock 증가
+     * @param quantity
+     */
+    public void addStock(int quantity){
+        this.stockQuantity += quantity;
+    }
+
+    /**
+     * stock 감소
+     * @param quantity
+     */
+    public void removeStock(int quantity){
+        int restStock = this.stockQuantity - quantity;
+        if(restStock < 0){
+            throw new NotEnoughStockException("need more stock");
+        }
+        stockQuantity = restStock;
+    }
+    
 }
