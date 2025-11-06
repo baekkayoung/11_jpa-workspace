@@ -1,0 +1,46 @@
+1. th:object - 이 폼이 어떤 객체랑 연결될 지 알려주는 것
+그래서 컨트롤러 단에서 셋팅을 해줘야 함!
+model.Attribute("memberForm", new MemberForm());
+
+*{} -> memberForm에 있는 객체랑 연결이 됨.
+그래서 *{name} 처럼 접근을 할 수 있음!
+마치 멤버폼 객체를 createMemberForm에서 기본 객체로 쓰겠다는 의미!
+
+2. th:field - 폼 입력값을 객체의 필드에 자동으로 연결하는 것
+
+<input type="text" th:field="*{city}" class="form-control" placeholder="도시를 입력하세요">
+= <input type="text" name="city" id="city" class="form-control" placeholder="도시를 입력하세요">
+=> name값과 id값도 해당 필드명으로 채워짐
+
+createMemberForm에 작성한 내용이 MemberForm에 담기게 됨.
+
+만약 memberForm.getName이 차은우라면 value도 연결됨! 없으면 ""
+
+------------------------------------------------------------------------------------------------------------------------
+
+값을 잘 넣으면 문제가 일어나지 않겠지만 만약 이름을 안 넣으면 어떻게 될까?
+문제가 된다.. 만약 이름을 입력하지 않으면 Null도 아니고 "" 빈문자열로 넘어감
+그래서 이름이 not null 이라면? 미리 검증을 해주자~
+
+@Vaild : 이 객체의 값들이 유효한지 검사해주는 어노테이션. MemberForm form 객체 안에 있는 값들이 올바른지 자동으로 체크해달라는 의미!
+public String create(@Valid MemberForm form){
+
+
+바인딩 리절트에 담긴 게 이쪽으로 자동으로 들어감!
+${#fields.hasErrors('name')}
+
+http 요청에서 넘어온 name 속성값들을 MemberForm 필드에 바인딩 후 그 필드들을 검증(NooEmpty 등..)
+
+? 연산자는
+null safe 연산자.
+<td th:text="${member.address?.city}"></td>
+여기서 member.address가 null이면 nullPoint 터짐
+
+member.address가 null이 아니면 .city를 보여주고 null 이면 그냥 null(혹은 빈칸)으로 처리
+
+------------------------------------------------------------------------------------------------------------------------
+
+updateItemForm에 action이 없는데? 근데 post만 있으면?
+현재 페이지 url 그대로 post 요청을 보낸다!
+
+@ModelAttributes 는 스프링에서 요청 파라미터를 자바 객체로 바꿔준다.
