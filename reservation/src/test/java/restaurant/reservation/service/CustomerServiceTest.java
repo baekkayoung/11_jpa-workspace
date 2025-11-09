@@ -19,7 +19,7 @@ class CustomerServiceTest {
     @Autowired CustomerRepository customerRepository;
 
     @Test
-    public void 고객저장() throws Exception {
+    public void 고객_정보_등록() throws Exception {
         //given
         Customer customer = new Customer();
         customer.setName("백가영");
@@ -32,7 +32,7 @@ class CustomerServiceTest {
     }
 
     @Test
-    public void 중복_고객_예외() throws Exception {
+    public void 중복_고객_예외_처리() throws Exception {
         //given
         Customer customer1 = new Customer();
         customer1.setName("baek");
@@ -45,11 +45,12 @@ class CustomerServiceTest {
         //when
         customerService.join(customer1);
 
+        //then
         assertThrows(IllegalStateException.class, ()-> customerService.join(customer2));
 
-
-        //then
     }
+
+
 
 
 }

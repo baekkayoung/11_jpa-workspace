@@ -23,5 +23,7 @@ public class Tables {
     @Enumerated(EnumType.STRING)
     private TableStatus status;
 
+    private int capacity;
+
 
 }

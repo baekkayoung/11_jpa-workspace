@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 @RequiredArgsConstructor
 public class OrderRepository2 {
+
     private final EntityManager em;
 
     public void save(Order order){

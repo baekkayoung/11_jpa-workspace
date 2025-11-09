@@ -25,19 +25,23 @@ public class MemberRepository2 {
         this.em = em;
     }*/
 
+    // 멤버 저장
     public Long save(Member member){
        em.persist(member);
         return member.getId();
     }
-
+ 
+    // 멤버 하나 찾기
     public Member findOne(Long id){
         return em.find(Member.class,id);
     }
-
+    
+    // 모든 멤버 찾기
     public List<Member> findAll(){
         return em.createQuery("select m from Member m", Member.class).getResultList();
     }
 
+    // 이름으로 멤버 찾기
     public List<Member> findByName(String name){
         return em.createQuery("select m from Member m where m.name =: name")
                 .setParameter("name",name)

@@ -11,7 +11,7 @@ public class ReservationRepository {
 
     private final EntityManager em;
 
-    // 예약하기
+    // 예약 생성하기
     public void save(Reservation reservation){
         em.persist(reservation);
     }

@@ -15,6 +15,7 @@ public class CustomerService {
     
     private final CustomerRepository customerRepository;
 
+    // 고객 정보 등록
     @Transactional
     public Long join(Customer customer){
         validateDuplicateCustomer(customer);
@@ -22,7 +23,7 @@ public class CustomerService {
     }
 
 
-    // 같은 이름 + 전화번호 중복 거르기
+    // 같은 이름 + 전화번로 중복 거르기
     private void validateDuplicateCustomer(Customer customer) {
         List<Customer> findCustomers = customerRepository.findByNameWithPhone(
                 customer.getName(),
@@ -34,13 +35,17 @@ public class CustomerService {
         }
     }
 
+    // 고객 한 명 찾기
+    public Customer findOne(Long CustomerId){
+        return customerRepository.findOne(CustomerId);
+    }
+
+    // 모든 고객 찾기
     private List<Customer> fineCustomers(){
         return customerRepository.findAll();
     }
 
-    public Customer findOne(Long CustomerId){
-        return customerRepository.findOne(CustomerId);
-    }
+
 
 
 
