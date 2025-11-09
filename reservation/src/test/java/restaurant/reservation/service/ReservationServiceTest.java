@@ -49,7 +49,7 @@ class ReservationServiceTest {
         assertEquals(table.getId(), reservation.getTables().getId());
         assertEquals(reservationPeopleCount, reservation.getReservationPeopleCount());
         assertEquals(ReservationStatus.RESERVED, reservation.getStatus());
-        assertEquals(TableStatus.RESERVED, reservation.getTables().getStatus()); // 테이블 상태가 예약됨으로 변경됐는지
+        assertEquals(TableStatus.RESERVED, reservation.getTables().getStatus());
     }
 
 }

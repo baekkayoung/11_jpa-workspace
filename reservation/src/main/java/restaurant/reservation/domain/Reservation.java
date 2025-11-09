@@ -73,10 +73,13 @@ public class Reservation {
         Reservation reservation = new Reservation();
         reservation.setCustomer(customer);
         reservation.setTables(tables);
-        reservation.setOrder(order);
         reservation.setReservationPeopleCount(reservationPeopleCount);
         reservation.setReservationTime(time);
         reservation.setStatus(ReservationStatus.RESERVED);
+
+        if (order != null) {
+            reservation.setOrder(order);
+        }
 
         // 테이블 상태 변경
         tables.setStatus(TableStatus.RESERVED);
