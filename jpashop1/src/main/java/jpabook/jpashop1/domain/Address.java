@@ -9,6 +9,8 @@ public class Address {
 //    public Address(){} 이거나
     protected Address(){}
 
+
+    // 객체 생성 시 초기값 설정
     public Address(String city, String street, String zipcode) {
         this.city = city;
         this.street = street;

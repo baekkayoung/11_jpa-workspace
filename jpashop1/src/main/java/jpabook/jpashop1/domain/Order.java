@@ -31,11 +31,15 @@ public class Order {
     @JoinColumn(name="delivery_id")
     private Delivery delivery;
 
-//    private Date orderDate;
+    // private Date orderDate;
     private LocalDateTime orderDate;
 
     @Enumerated(EnumType.STRING)
     private OrderStatus status; // 주문 상태 [ORDER, CANCEL]
+
+
+    //=============================================//
+
 
     protected Order(){}; // Order order = new Order(); => service에서 이거 안 됨
 
