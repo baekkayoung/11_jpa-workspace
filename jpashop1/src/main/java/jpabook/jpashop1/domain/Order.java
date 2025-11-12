@@ -61,7 +61,7 @@ public class Order {
 
     // == 생성 메소드 == //
 
-    /*(누가 샀는지, 배송정보, 뭐샀는지 : 가변인자문법)*/
+    /*(누가 샀는지, 배송정보, 뭐샀는지 : 가변인자문법!)*/
     /*
      가변인자문법 OrderItem... orderItems => OrderItem[] orderItems
      createOrder(m, d, orderItem1);
@@ -83,7 +83,7 @@ public class Order {
         return order;
     }
 
-    // == 비즈니스 로직 == //
+    // === 비즈니스 로직 ===//
     /* 주문 취소 */
     public void cancel() {
         if (delivery.getStatus() == DeliveryStatus.COMP) {
