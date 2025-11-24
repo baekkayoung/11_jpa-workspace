@@ -30,7 +30,6 @@ public class MemberApiController {
     public Result membersV2() {
         List<Member> members = memberService.findMembers(); // 뽑고 싶은 것만 .. => DTO
 
-
         List<MemberDTO> collect = members.stream()
                 .map(m -> new MemberDTO(m.getName()))
                 .collect(Collectors.toList());
@@ -85,7 +84,7 @@ public class MemberApiController {
     }
 
 
-    /// 첫2 업데이트
+    /// ver2 멤버 업데이트
     @PutMapping("/api/v2/members/{id}")
     public UpdateMemberResponse updateMemberV2(
             @PathVariable("id") Long id,
@@ -108,6 +107,5 @@ public class MemberApiController {
         private Long id;
         private String name;
     }
-
 
 }
