@@ -24,9 +24,9 @@ public abstract class Item {
     private int price;
     private int stockQuantity; // 재고 수량
 
-    @ManyToMany(mappedBy = "items")
-//    @JoinTable(name="category_item") 이미 category에서 적어뒀기 때문에 또 적지 않아도 됨
-    private List<Category> category = new ArrayList<>();
+        @ManyToMany(mappedBy = "items")
+    //    @JoinTable(name="category_item") 이미 category에서 적어뒀기 때문에 또 적지 않아도 됨
+        private List<Category> category = new ArrayList<>();
 
 
     // == 비즈니스 로직 == //

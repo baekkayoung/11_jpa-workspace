@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Fetch;
+import org.hibernate.proxy.pojo.bytebuddy.ByteBuddyInterceptor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ public class Order {
     private Member member;
 
     @OneToMany(mappedBy = "order", cascade = ALL)
-    private List<OrderItem> orderItems =new ArrayList<>();
+    private List<OrderItem> orderItems = new ArrayList<>();
 
     @OneToOne(fetch = LAZY, cascade = ALL)
     @JoinColumn(name="delivery_id")
@@ -37,9 +38,7 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus status; // 주문 상태 [ORDER, CANCEL]
 
-
     //=============================================//
-
 
     protected Order(){}; // Order order = new Order(); => service에서 이거 안 됨
 
