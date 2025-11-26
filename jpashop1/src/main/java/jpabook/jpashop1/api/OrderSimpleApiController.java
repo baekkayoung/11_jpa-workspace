@@ -27,8 +27,17 @@ public class OrderSimpleApiController {
 
     private final OrderRepository orderRepository;
 
+
+    // v1
     @GetMapping("/api/v1/simple-orders")
-    public List<Order> odersV1() {
+    public List<Order> ordersV1(){
+        List<Order> all = orderRepository.findAllByString(new OrderSearch());
+        return all;
+    }
+
+    // v1.1
+    @GetMapping("/api/v1.1/simple-orders")
+    public List<Order> ordersV1_1() {
         List<Order> all = orderRepository.findAllByString(new OrderSearch()); // 오더서치 뭐지?
 
         for (Order order : all) {
@@ -45,15 +54,19 @@ public class OrderSimpleApiController {
         // N + 1 < - > 1 + N
         // Member N번 + Delivery N번
         List<Order> orders = orderRepository.findAllByString(new OrderSearch()); // 이때는 오더만 가지고 옴
-        List<SimpleOrderDto> result = orders.stream().map(o -> new SimpleOrderDto(o)).collect(Collectors.toList());
+        List<SimpleOrderDto> result = orders.stream()
+                .map(o -> new SimpleOrderDto(o))
+                .collect(Collectors.toList());
         // 건바이 건으로 들어감 멤버다 그런거에 대한 정보는 없음. 레이지라.
         return  result;
     }
 
     @GetMapping("/api/v3/simple-orders")
-    public List<SimpleOrderDto> ordersV3(){ // Order 엔티티로 반환형 쓰지마!!
+    public List<SimpleOrderDto> ordersV3(){
         List<Order> orders = orderRepository.findAllWithMemberDelivery();
-        List<SimpleOrderDto> result = orders.stream().map(o -> new SimpleOrderDto(o)).collect(Collectors.toList());
+        List<SimpleOrderDto> result = orders.stream()
+                .map(o -> new SimpleOrderDto(o))
+                .collect(Collectors.toList());
         return result;
     }
 

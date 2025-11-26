@@ -102,4 +102,30 @@ public class OrderRepository {
         ).getResultList();
         return result;
     }
+
+    public List<Order> findAllWithItem() {
+        return  em.createQuery(
+                "select distinct o from Order o" +
+                        " join fetch o.member m"+
+                        " join fetch o.delivery d"+
+                        " join fetch o.orderItems oi"+ // 컬렉션
+                        " join fetch oi.item i" , Order.class)
+                .setFirstResult(1)
+                .setMaxResults(100)
+                .getResultList();
+    }
+
+    // 먼저 ToOne의 관계를 패치조인 한다. (페이징!)
+    public List<Order> findAllWithMemberDelivery(int offset, int limit) {
+        List<Order> result = em.createQuery(
+                "select o from Order o"
+                        + " join fetch o.member m" // join 패치 일때는 바로
+                        + " join fetch o.delivery d", Order.class
+              )
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList();
+        return result;
+
+    }
 }
