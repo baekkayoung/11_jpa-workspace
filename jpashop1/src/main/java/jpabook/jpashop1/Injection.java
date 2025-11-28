@@ -1,7 +1,6 @@
 package jpabook.jpashop1;
 
 import jpabook.jpashop1.repository.MemberRepository;
-import jpabook.jpashop1.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 // DI(Dependency Injection)

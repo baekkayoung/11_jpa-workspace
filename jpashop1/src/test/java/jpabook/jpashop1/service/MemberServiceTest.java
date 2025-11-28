@@ -6,7 +6,6 @@ import jpabook.jpashop1.repository.MemberRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -17,7 +16,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class MemberServiceTest {
 
     @Autowired MemberService memberService;
-    @Autowired MemberRepository memberRepository;
+    @Autowired
+    MemberRepository memberRepository;
 
     @Autowired EntityManager em;
 
@@ -34,7 +34,7 @@ class MemberServiceTest {
         //then
 //        assertThat()
         em.flush();
-        assertEquals(member, memberRepository.findOne(saveId)); // 위 멤버랑 디비에서 받아온 멤버 같은지 확인
+        assertEquals(member, memberRepository.findById(saveId).get()); // 위 멤버랑 디비에서 받아온 멤버 같은지 확인
     }
 
     @Test
