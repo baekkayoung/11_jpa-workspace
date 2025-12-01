@@ -1,9 +1,11 @@
 package jpabook.jpashop1.repository;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
-import jpabook.jpashop1.domain.Member;
+import jpabook.jpashop1.domain.*;
 import jpabook.jpashop1.domain.Order;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -103,6 +105,47 @@ public class OrderRepository {
         return result;
     }
 
+
+    //////////////////////// 위에 것 쿼리 dsl 사용해서 변경 //////////////////////////////////
+    
+    public List<Order> findALl(OrderSearch orderSearch) {
+        QOrder order = QOrder.order; // Q파일에서 order를 꺼내는 것.
+        QMember member = QMember.member;
+
+        JPAQueryFactory query = new JPAQueryFactory(em); // 쿼리를 짜겠다.
+        List<Order> result = query
+                .select(order)
+                .from(order)
+                .join(order.member, member)
+                .where(statusEq(orderSearch.getOrderStatus()),nameLike(orderSearch,member))
+                .limit(1000)
+                .fetch();
+
+        return result;
+    }
+
+    // 이름
+    private BooleanExpression nameLike(OrderSearch orderSearch, QMember member) {
+        if(!StringUtils.hasText(orderSearch.getMemberName())) { // 유효한지 유효하지 않은지 검정 기능
+            return null;
+        }
+        // like "%김%";
+        return member.name.contains(orderSearch.getMemberName()); // Like 검색
+    }
+
+
+    // 상태
+    private BooleanExpression statusEq(OrderStatus statusCond){
+        // 검색할 때 주문의 상티를 선택 안 한 경우 => where절 무시
+        if(statusCond == null){
+            return null;
+        }
+
+        return QOrder.order.status.eq(statusCond);
+    }
+
+
+
     public List<Order> findAllWithItem() {
         return  em.createQuery(
                 "select distinct o from Order o" +
@@ -130,3 +173,4 @@ public class OrderRepository {
     }
 
 }
+

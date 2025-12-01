@@ -3,9 +3,6 @@ package jpabook.jpashop1.service;
 import jakarta.validation.constraints.NotEmpty;
 import jpabook.jpashop1.domain.Member;
 import jpabook.jpashop1.repository.MemberRepository;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -61,12 +58,12 @@ public class MemberService {
     }
 
     public Member findOne(Long memberId){
-        return memberRepository.findOne(memberId);
+        return memberRepository.findById(memberId).get();
     }
 
     @Transactional
-    public void update(Long id, @NotEmpty String name) {
-        Member member = memberRepository.findOne(id);
+    public void update(Long memberId, @NotEmpty String name) {
+        Member member = memberRepository.findById(memberId).get();
         member.setName(name);
     }
 }
